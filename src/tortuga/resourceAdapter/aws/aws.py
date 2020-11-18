@@ -579,7 +579,9 @@ class Aws(ResourceAdapter):
               hardwareProfile: str=None,
               softwareProfile: str=None,
               launch_template_name: str=None,
-              adapter_args: dict={}):
+              adapter_args: dict={},
+              tags: dict={},
+              advanced: dict={}):
         """
         Create a new scale set in AWS. If launch_template_name is provided,
         the corresponding launch template will be used to generate the scale
@@ -634,6 +636,16 @@ class Aws(ResourceAdapter):
         # Generate request data structure
         VPCZoneIdentifier = configDict['autoscaling_subnet_ids'] if 'autoscaling_subnet_ids' in configDict else configDict.get('subnet_id')
 
+        tagsList = []
+        for k,v in tags.items():
+            t = {'ResourceId': name,
+                 'ResourceType': 'auto-scaling-group',
+                 'PropagateAtLaunch': True,
+                 'Key': k,
+                 'Value': v
+            }
+            tagsList.append = t
+
         request_data = {
             'AutoScalingGroupName': name,
             'LaunchTemplate': {'LaunchTemplateName': launch_template_name},
@@ -641,8 +653,10 @@ class Aws(ResourceAdapter):
             'MaxSize': maxCount,
             'DesiredCapacity': desiredCount,
             'VPCZoneIdentifier': VPCZoneIdentifier,
-            'HealthCheckGracePeriod': configDict.get('healthcheck_period'),
+            'HealthCheckGracePeriod': configDict.get('healthcheck_period')
         }
+        if len(tagsList) > 0:
+            request_data['Tags'] = tagsList
 
         # Request creation of auto scaling group
         try:

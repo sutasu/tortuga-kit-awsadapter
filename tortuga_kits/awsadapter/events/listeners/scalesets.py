@@ -139,7 +139,9 @@ class AwsScaleSetCreatedListener(AwsScaleSetListenerMixin, BaseListener):
                 hardwareProfile=ssr.hardwareprofile_name,
                 softwareProfile=ssr.softwareprofile_name,
                 launch_template_name=ssr.instance_template_name,
-                adapter_args=ssr.adapter_arguments)
+                adapter_args=ssr.adapter_arguments,
+                tags=ssr.tags,
+                advanced=ssr.advanced)
 
         except Exception as ex:
             logger.error("Error creating resource request: %s", ex)
