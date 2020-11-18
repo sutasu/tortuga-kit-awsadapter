@@ -233,6 +233,11 @@ SETTINGS = {
         description='AWS subnet ID for new node instances',
         **GROUP_NETWORKING
     ),
+    'autoscaling_subnet_ids': settings.StringSetting(
+        display_name='Autoscaling Subnet IDs',
+        description='Comma-separated list of AWS Autoscaling subnet IDs',
+        **GROUP_NETWORKING
+    ),
     'associate_public_ip_address': settings.BooleanSetting(
         display_name='Automatically assign public IP address when set to'
                      ' \'true\'',

@@ -632,13 +632,15 @@ class Aws(ResourceAdapter):
                 launch_template['LaunchTemplate']['LaunchTemplateName']
 
         # Generate request data structure
+        VPCZoneIdentifier = configDict['autoscaling_subnet_ids'] if 'autoscaling_subnet_ids' in configDict else configDict.get('subnet_id')
+
         request_data = {
             'AutoScalingGroupName': name,
             'LaunchTemplate': {'LaunchTemplateName': launch_template_name},
             'MinSize': minCount,
             'MaxSize': maxCount,
             'DesiredCapacity': desiredCount,
-            'VPCZoneIdentifier': configDict.get('subnet_id'),
+            'VPCZoneIdentifier': VPCZoneIdentifier,
             'HealthCheckGracePeriod': configDict.get('healthcheck_period'),
         }
 
